@@ -1,0 +1,32 @@
+{
+  "name": "storybook-vitest-poc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsr generate && tsc && vite build",
+    "preview": "vite preview",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "routes:generate": "tsr generate",
+    "routes:watch": "tsr watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.12.4",
+  "devDependencies": {
+    "@tanstack/router-cli": "^1.124.0",
+    "@tanstack/router-devtools": "^1.124.0",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.6.0",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.0"
+  },
+  "dependencies": {
+    "@tanstack/react-router": "^1.124.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  }
+}
