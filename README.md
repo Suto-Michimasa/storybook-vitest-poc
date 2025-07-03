@@ -1,6 +1,7 @@
-# Storybook + Vitest PoC
+# Storybook + Vitest PoC (Monorepo)
 
 React + TanStack Router + Storybook + Vitest の統合環境のPoC実装です。
+pnpm workspaceを使用したmonorepo構成で実装されています。
 
 ## 技術スタック
 
@@ -10,7 +11,7 @@ React + TanStack Router + Storybook + Vitest の統合環境のPoC実装です�
 - **Vitest** - 単体テスト
 - **Testing Library** - コンポーネントテスト
 - **Vite** - ビルドツール
-- **pnpm** - パッケージマネージャー
+- **pnpm workspace** - monorepoパッケージマネージャー
 
 ## セットアップ
 
@@ -34,20 +35,32 @@ pnpm test:ui
 ## プロジェクト構成
 
 ```
-src/
-├── components/        # 共通コンポーネント
-│   ├── Button.tsx
-│   ├── Button.test.tsx    # Vitestテスト
-│   ├── Button.stories.tsx # Storybookストーリー
-│   └── Button.spec.stories.tsx # インタラクションテスト
-├── routes/           # TanStack Routerのページ
-│   ├── __root.tsx
-│   ├── index.tsx
-│   ├── about.tsx
-│   └── demo.tsx
-├── test/            # テスト設定
-│   └── setup.ts
-└── main.tsx         # エントリーポイント
+.
+├── packages/
+│   ├── ui/                  # UIコンポーネントライブラリ
+│   │   └── src/
+│   │       └── components/
+│   │           ├── Card.tsx
+│   │           ├── Card.stories.tsx
+│   │           ├── Badge.tsx
+│   │           └── Badge.stories.tsx
+│   └── utils/               # ユーティリティコンポーネント
+│       └── src/
+│           └── components/
+│               ├── DatePicker.tsx
+│               ├── DatePicker.stories.tsx
+│               ├── Toggle.tsx
+│               └── Toggle.stories.tsx
+├── src/                     # メインアプリケーション
+│   ├── components/
+│   │   ├── Button.tsx
+│   │   ├── Button.stories.tsx
+│   │   ├── Form.tsx
+│   │   └── Form.stories.tsx
+│   ├── routes/              # TanStack Routerのページ
+│   └── test/               # テスト設定
+├── .storybook/             # Storybook設定（ルート）
+└── pnpm-workspace.yaml     # Workspace設定
 ```
 
 ## 実装内容
@@ -74,9 +87,17 @@ src/
 - 同じストーリーファイルをStorybookとVitestの両方で活用
 - Playwrightによる実際のブラウザ環境でのテスト
 
+## Monorepo構成の特徴
+
+- **統合Storybook**: ルートで`pnpm storybook`を実行すると全パッケージのストーリーが表示
+- **独立パッケージ**: 各パッケージは独自の`package.json`とTypeScript設定を保持
+- **共有依存関係**: ReactやTypeScriptなどの共通依存関係はルートで管理
+- **Vitestテスト統合**: 全パッケージのストーリーをまとめてテスト実行
+
 ## 今後の拡張案
 
-- [ ] Storybook Test Runnerの追加
+- [ ] Storybook Compositionによる分散Storybook構成
 - [ ] Visual Regression Testingの導入
 - [ ] MSWによるAPIモック
-- [ ] GitHub Actionsでの自動テスト
+- [ ] パッケージ間の依存関係デモ
+- [ ] Changesetによるバージョン管理
