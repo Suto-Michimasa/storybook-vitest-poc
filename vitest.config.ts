@@ -38,7 +38,9 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': resolve(__dirname, './src')
+      '@': resolve(__dirname, './src'),
+      '@myorg/ui': resolve(__dirname, './packages/ui/src'),
+      '@myorg/utils': resolve(__dirname, './packages/utils/src')
     }
   }
 });
