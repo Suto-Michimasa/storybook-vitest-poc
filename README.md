@@ -63,11 +63,16 @@ src/
    - `*.stories.tsx` - コンポーネントカタログ
    - `*.spec.stories.tsx` - playファンクションによるインタラクションテスト
 
+3. **Storybook Vitest Addon** - StorybookストーリーをVitestで実行
+   - `pnpm test:storybook` でPlaywrightを使用してブラウザ内でテスト実行
+   - CIでのテスト自動化に最適
+
 ### 利点
 
 - コンポーネント開発時はStorybookでビジュアル確認
 - CI/CDではVitestで高速テスト実行
-- 同じテストコードをStorybookとVitestで共有可能
+- 同じストーリーファイルをStorybookとVitestの両方で活用
+- Playwrightによる実際のブラウザ環境でのテスト
 
 ## 今後の拡張案
 
