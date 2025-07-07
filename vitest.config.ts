@@ -13,7 +13,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'happy-dom',
-    setupFiles: './src/test/setup.ts',
+    setupFiles: './vitest.setup.ts',
     projects: [{
       extends: true,
       plugins: [
@@ -35,12 +35,5 @@ export default defineConfig({
         setupFiles: ['.storybook/vitest.setup.ts']
       }
     }]
-  },
-  resolve: {
-    alias: {
-      '@': resolve(__dirname, './src'),
-      '@myorg/ui': resolve(__dirname, './packages/ui/src'),
-      '@myorg/utils': resolve(__dirname, './packages/utils/src')
-    }
   }
 });
