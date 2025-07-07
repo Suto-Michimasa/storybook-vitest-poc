@@ -1,57 +1,56 @@
-# Storybook + Vitest PoC (Monorepo)
+# Storybook Vitest Stories.tsx Issue Reproduction
 
-React + TanStack Router + Storybook + Vitest の統合環境のPoC実装です。
-pnpm workspaceを使用したmonorepo構成で実装されています。
+This repository demonstrates an issue where `@storybook/addon-vitest` doesn't recognize story files named `stories.tsx` without component prefix.
 
-## 技術スタック
+## Issue Description
 
-- **React 19** + TypeScript
-- **TanStack Router** - ファイルベースルーティング
-- **Storybook 9** - コンポーネント開発環境
-- **Vitest** - 単体テスト
-- **Testing Library** - コンポーネントテスト
-- **Vite** - ビルドツール
-- **pnpm workspace** - monorepoパッケージマネージャー
+- Files named `ComponentName.stories.tsx` ✅ Work correctly
+- Files named `stories.tsx` ❌ Show "No test suite found" error
 
-## セットアップ
+## Setup
 
 ```bash
-# 依存関係のインストール
+# Install dependencies
 pnpm install
 
-# 開発サーバー起動
-pnpm dev
-
-# Storybook起動
+# Run Storybook (stories.tsx files are displayed correctly)
 pnpm storybook
 
-# テスト実行
-pnpm test
-
-# テストUI起動
-pnpm test:ui
+# Run tests (stories.tsx files are not recognized)
+pnpm test-storybook
 ```
 
-## プロジェクト構成
+## Reproduction Steps
+
+1. This repo contains working story files:
+   - `packages/ui/src/components/Badge.stories.tsx` - ✅ Recognized
+   - `packages/ui/src/components/Card.stories.tsx` - ✅ Recognized
+
+2. We'll create a story file without component prefix:
+   - `packages/ui/src/components/Example/stories.tsx` - ❌ Not recognized
+
+3. Run `pnpm test-storybook` and observe the error
+
+## Project Structure
 
 ```
 .
 ├── packages/
-│   ├── ui/                  # UIコンポーネントライブラリ
+│   ├── ui/
 │   │   └── src/
 │   │       └── components/
 │   │           ├── Card.tsx
 │   │           ├── Card.stories.tsx
 │   │           ├── Badge.tsx
 │   │           └── Badge.stories.tsx
-│   └── utils/               # ユーティリティコンポーネント
+│   └── utils/
 │       └── src/
 │           └── components/
 │               ├── DatePicker.tsx
 │               ├── DatePicker.stories.tsx
 │               ├── Toggle.tsx
 │               └── Toggle.stories.tsx
-├── src/                     # メインアプリケーション
+├── src/
 │   ├── components/
 │   │   ├── Button.tsx
 │   │   ├── Button.stories.tsx
@@ -63,41 +62,32 @@ pnpm test:ui
 └── pnpm-workspace.yaml     # Workspace設定
 ```
 
-## 実装内容
+## Expected Behavior
 
-### コンポーネントテスト戦略
+All files matching Storybook's stories patterns should be recognized by addon-vitest.
 
-1. **Vitest** - 高速な単体テスト実行
-   - `*.test.tsx` ファイルで実装
-   - Testing Library使用
-   - happy-domで高速実行
+## Actual Behavior
 
-2. **Storybook** - ビジュアルテスト・インタラクションテスト
-   - `*.stories.tsx` - コンポーネントカタログ
-   - `*.spec.stories.tsx` - playファンクションによるインタラクションテスト
+Only `*.stories.tsx` pattern is recognized, `stories.tsx` pattern is ignored.
 
-3. **Storybook Vitest Addon** - StorybookストーリーをVitestで実行
-   - `pnpm test:storybook` でPlaywrightを使用してブラウザ内でテスト実行
-   - CIでのテスト自動化に最適
+## Workaround
 
-### 利点
+Add explicit include pattern in `vitest.config.ts`:
 
-- コンポーネント開発時はStorybookでビジュアル確認
-- CI/CDではVitestで高速テスト実行
-- 同じストーリーファイルをStorybookとVitestの両方で活用
-- Playwrightによる実際のブラウザ環境でのテスト
+```typescript
+test: {
+  include: [
+    '**/*.stories.{js,jsx,ts,tsx}',
+    '**/stories.{js,jsx,ts,tsx}', // This line is needed
+  ],
+}
+```
 
-## Monorepo構成の特徴
+## Environment
 
-- **統合Storybook**: ルートで`pnpm storybook`を実行すると全パッケージのストーリーが表示
-- **独立パッケージ**: 各パッケージは独自の`package.json`とTypeScript設定を保持
-- **共有依存関係**: ReactやTypeScriptなどの共通依存関係はルートで管理
-- **Vitestテスト統合**: 全パッケージのストーリーをまとめてテスト実行
-
-## 今後の拡張案
-
-- [ ] Storybook Compositionによる分散Storybook構成
-- [ ] Visual Regression Testingの導入
-- [ ] MSWによるAPIモック
-- [ ] パッケージ間の依存関係デモ
-- [ ] Changesetによるバージョン管理
+- @storybook/addon-vitest: ^9.0.15
+- @storybook/react-vite: ^9.0.15
+- storybook: ^9.0.15
+- vitest: ^3.2.4
+- Node: 18+
+- pnpm: 10.12.4
