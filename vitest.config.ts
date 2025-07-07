@@ -31,7 +31,11 @@ export default defineConfig({
             browser: 'chromium'
           }]
         },
-        setupFiles: ['.storybook/vitest.setup.ts']
+        setupFiles: ['.storybook/vitest.setup.ts'],
+        // Exclude Node.js specific MSW setup from browser tests
+        // resolve: {
+        //   conditions: ['browser']
+        // }
       }
     }]
   }
