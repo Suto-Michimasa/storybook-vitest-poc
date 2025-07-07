@@ -50,16 +50,11 @@ pnpm test-storybook
 │               ├── DatePicker.stories.tsx
 │               ├── Toggle.tsx
 │               └── Toggle.stories.tsx
-├── src/
-│   ├── components/
-│   │   ├── Button.tsx
-│   │   ├── Button.stories.tsx
-│   │   ├── Form.tsx
-│   │   └── Form.stories.tsx
-│   ├── routes/              # TanStack Routerのページ
-│   └── test/               # テスト設定
-├── .storybook/             # Storybook設定（ルート）
-└── pnpm-workspace.yaml     # Workspace設定
+├── .storybook/
+├── vite.config.ts
+├── vitest.config.ts
+├── vitest.setup.ts
+└── pnpm-workspace.yaml
 ```
 
 ## Expected Behavior
